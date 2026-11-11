@@ -1,0 +1,43 @@
+paths:
+  repo_root: "."
+  baseline_solver: "erdr/reevo-tsp/outputs/reevo_baseline/best_solver.py"
+  erdr_solver: "erdr/reevo-tsp/outputs/reevo_erdr/best_solver.py"
+  base_pkl: "data_generate/TSP200_u50/TSP200_u50_concorde.pkl"
+  run_root: "erdr/reevo-tsp/data/dynamic_evaluation_runs"
+  run_name: ""
+  # optional; empty => auto prefix TSP{base_nodes}_dyn
+  dataset_prefix: ""
+
+dynamic_evaluation:
+  # one run evaluates one method only
+  method: "erdr"
+  change_types: "location_change,request_arrival,request_cancellation"
+  n_instance: 50
+  # <=0 means evaluate all instances in each generated dynamic dataset file
+  n_instance_eval: 0
+  seed: 20260528
+  # semicolon-separated ratio collections, each collection must include >=2 ratios
+  # example: "0.2,0.5;0.5,0.8"
+  ratio_sets: "0.2,0.5,0.8"
+
+evaluation:
+  metric_basis: "gap"  # gap | cost
+  group_evaluation_mode: "mean_only"
+  tail_risk_basis: "time"
+
+gls:
+  time_limit_per_instance: 10.0
+  iter_limit: 500
+  perturbation_moves: 2
+  gap_eps: 1.0e-12
+
+generation:
+  jitter_sigma: 0.02
+  node_frac: 0.2
+  concorde_scale: 10000
+
+jit:
+  enable_kernels: true
+  numba_cache: true
+  warmup: true
+  decorate_guide: false

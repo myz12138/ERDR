@@ -1,0 +1,35 @@
+problem_name: tsp_gls
+problem_type: gls
+obj_type: min
+problem_size: 60
+func_name: heuristics
+description: Solving Traveling Salesman Problem (TSP) via guided local search. TSP requires finding the shortest path that visits all given nodes and returns to the starting node.
+pro: Traveling Salesman Problem (TSP)
+alg: Guided Local Search
+
+adapter:
+  mode: erdr
+  metric_basis: gap
+  group_evaluation_mode: mean_variability_tail
+  tail_risk_basis: gap
+  n_instance_eval: 0
+  dataset_path: "data_generate/TSP64_u50/TSP64_u50_concorde.pkl"
+  time_limit_per_instance: 5.0
+  gls_perturbation_moves: 3
+  gls_iter_limit: 300
+  gap_eps: 1.0e-12
+  output_mode: minimal
+  keep_top_k_solvers: 10
+
+  erdr:
+    enabled: true
+    group_size: 5
+    n_groups_total: 12
+    n_groups_train: 8
+    n_groups_val: 4
+    split_seed: 42
+    val_interval: 2
+    train_pool_multiplier: 2
+    dds_eps_rel: 0.001
+    dds_softmax_tau: 1.0
+    dds_novelty_weight: 0.05

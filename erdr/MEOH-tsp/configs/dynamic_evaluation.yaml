@@ -1,0 +1,20 @@
+paths:
+  repo_root: "."
+  baseline_solver: "erdr/MEOH-tsp/outputs/meoh_baseline/best_solver.py"
+  erdr_solver: "erdr/MEOH-tsp/outputs/meoh_erdr/best_solver.py"
+  base_pkl: "data_generate/TSP200_u50/TSP200_u50_concorde.pkl"
+  run_root: "erdr/MEOH-tsp/data/dynamic_evaluation_runs"
+
+dynamic_evaluation:
+  method: "erdr"
+  change_types: "location_change,request_arrival,request_cancellation"
+  n_instance: 50
+  seed: 20260524
+  ratio_sets: "0.2,0.5,0.8"
+
+gls:
+  neighbor_k: 20
+  time_limit_per_instance: 10.0
+  ite_max: 500
+  perturbation_moves: 2
+  gap_eps: 1.0e-12

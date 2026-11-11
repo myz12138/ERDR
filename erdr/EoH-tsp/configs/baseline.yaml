@@ -1,0 +1,54 @@
+llm:
+  llm_use_local: false
+  llm_local_url: ""
+  llm_api_endpoint: ""
+  llm_api_key: ""
+  llm_model: "gpt-6-luna"
+
+paths:
+  train_pkl: "data_generate/TSP200_u50/TSP200_u50_concorde.pkl"
+  output_dir: "erdr/EoH-tsp/outputs/eoh_baseline"
+
+method:
+  backbone: "eoh"
+  variant: "baseline"
+
+eoh:
+  method: "eoh"
+  ec_pop_size: 4
+  ec_n_pop: 10
+  ec_m: 2
+  ec_operators: ["e1", "e2", "m1", "m2", "m3"]
+  ec_operator_weights: [1.0, 1.0, 1.0, 1.0, 1.0]
+
+evaluation:
+  n_instance_eval: 50
+  gls_neighbor_k: 20
+  # fixed by experiment requirement:
+  gls_time_limit_per_instance: 10.0
+  gls_ite_max: 500
+  gls_perturbation_moves: 2
+  archive_top_k: 10
+  gap_eps: 1.0e-12
+  use_gap_metric: true
+  group_evaluation_mode: "mean_only"
+  tail_risk_basis: "time"
+  dominance_dissimilarity:
+    enabled: true
+    eps_rel: 0.001
+    softmax_tau: 1.0
+    novelty_weight: 0.05
+  grouped_evaluation:
+    enabled: false
+    group_size: 5
+    n_groups_total: 10
+    n_groups_train: 5
+    n_groups_val: 5
+    split_seed: 20260528
+
+exp:
+  exp_n_proc: 8
+  exp_debug_mode: false
+  # must cover the worst-case 50 * 20s upper bound per candidate (+LLM overhead).
+  eva_timeout: 2400
+  eva_numba_decorator: false

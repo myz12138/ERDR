@@ -1,0 +1,7 @@
+_target_: utils.llm_client.openai.OpenAIClient
+
+# Parameters are centralized in cfg/run/tsp_gls_adapter.yaml
+model: ${run.llm.model}
+temperature: ${run.llm.temperature}
+llm_api_endpoint: ${run.llm.llm_api_endpoint}
+llm_api_key: ${run.llm.llm_api_key}
