@@ -6,7 +6,7 @@ Multi-goal route planning uses spatial data on service locations and pairwise tr
 
 ERDR is a plug-and-play framework that guides AHD evolution toward solvers that re-solve dynamically changed instances faster. Validation-guided reselection reevaluates candidates on instances excluded from routine evolution. Runtime robustness-augmented evaluation supplements the original evaluation objective with inter-group variability and tail risk in solving time.
 
-The paper reports average re-solving speedups of 2.2× under guided local search (GLS) and 4.4× under iterated local search (ILS). This repository provides GLS-based baseline and ERDR workflows for EoH, ReEvo, Hercules, and MEoH, together with data-generation and dynamic-evaluation scripts.
+This repository provides guided local search (GLS)-based baseline and ERDR workflows for EoH, ReEvo, Hercules, and MEoH, together with data-generation and dynamic-evaluation scripts.
 
 ![Overview of ERDR](./assets/erdr_framework.png)
 
