@@ -1,0 +1,48 @@
+llm:
+  llm_api_endpoint: ""
+  llm_api_key: ""
+  llm_model: "gpt-6-luna"
+  llm_temperature: 1.0
+
+paths:
+  train_pkl: "data_generate/TSP200_u50/TSP200_u50_concorde.pkl"
+  output_dir: "erdr/reevo-tsp/outputs/reevo_erdr"
+
+method:
+  backbone: "reevo"
+  variant: "erdr"
+
+reevo:
+  max_fe: 100
+  pop_size: 4
+  init_pop_size: 10
+  mutation_rate: 0.5
+  timeout: 300
+  diversify_init_pop: true
+
+evaluation:
+  mode: "erdr"
+  metric_basis: "gap"
+  group_evaluation_mode: "mean_variability_tail"
+  tail_risk_basis: "time"
+  n_instance_eval: 50
+  gls_time_limit_per_instance: 10.0
+  gls_ite_max: 500
+  gls_perturbation_moves: 2
+  gap_eps: 1.0e-12
+  grouped_evaluation:
+    enabled: true
+    group_size: 5
+    n_groups_total: 10
+    n_groups_train: 5
+    n_groups_val: 5
+    split_seed: 42
+  dominance_dissimilarity:
+    enabled: true
+    eps_rel: 0.001
+    softmax_tau: 1.0
+    novelty_weight: 0.05
+
+exp:
+  output_mode: "minimal"
+  keep_top_k_solvers: 10

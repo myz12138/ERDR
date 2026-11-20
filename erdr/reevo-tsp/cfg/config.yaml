@@ -1,0 +1,29 @@
+defaults:
+  - _self_
+  - run: tsp_gls_adapter
+  - problem: tsp_gls
+  - llm_client: openai
+  # [Optional] set different clients for operators
+  - llm_client@llm_long_ref: null
+  - llm_client@llm_short_ref: null
+  - llm_client@llm_crossover: null
+  - llm_client@llm_mutation: null
+  - override hydra/output: local
+  - override hydra/job_logging: default
+  - override hydra/hydra_logging: default
+
+hydra:
+  job:
+    name: ${problem.problem_name}-${problem.problem_type}
+    chdir: True
+
+# The chosen algorithm
+algorithm: ${run.algorithm} # other options are "eoh", "ael"; some problems may not support "ael"
+
+# Main GA loop parameters
+max_fe: ${run.max_fe} # maximum number of function evaluations
+pop_size: ${run.pop_size} # population size for GA
+init_pop_size: ${run.init_pop_size} # initial population size for GA
+mutation_rate: ${run.mutation_rate} # mutation rate for GA
+timeout: ${run.timeout} # timeout for evaluation of a single heuristic
+diversify_init_pop: ${run.diversify_init_pop} # whether to diversify the initial population

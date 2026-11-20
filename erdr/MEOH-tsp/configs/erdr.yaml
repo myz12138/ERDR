@@ -1,0 +1,42 @@
+llm:
+  llm_api_host: ""
+  llm_api_key: ""
+  llm_model: "gpt-6-luna"
+  llm_temperature: 1.0
+  timeout: 120
+
+paths:
+  train_pkl: "data_generate/TSP200_u50/TSP200_u50_concorde.pkl"
+  output_dir: "erdr/MEOH-tsp/outputs/meoh_erdr"
+
+method:
+  backbone: "meoh"
+  variant: "erdr"
+
+meoh:
+  pop_size: 10
+  selection_num: 2
+  max_sample_nums: 220
+  max_generations: 1000
+  num_samplers: 4
+  num_evaluators: 4
+  debug_mode: false
+
+evaluation:
+  n_instance_eval: 50
+  gls_neighbor_k: 20
+  gls_time_limit_per_instance: 10.0
+  gls_ite_max: 500
+  gls_perturbation_moves: 2
+  timeout_seconds: 1200.0
+  gap_eps: 1.0e-12
+  use_gap_metric: true
+  group_evaluation_mode: "mean_variability_tail"
+  tail_risk_basis: "time"
+  grouped_evaluation:
+    enabled: true
+    group_size: 5
+    n_groups_total: 10
+    n_groups_train: 5
+    n_groups_val: 5
+    split_seed: 42

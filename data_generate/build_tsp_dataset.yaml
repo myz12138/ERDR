@@ -1,0 +1,26 @@
+paths:
+  # Relative to this config file (data_generate/). This resolves to <workspace>/data_generate
+  out_dir: "."
+
+generation:
+  # Single int, list, or comma string are all supported.
+  sizes: [50, 100, 200, 500, 1000]
+  n_instances: 50
+  seed: 20260527
+  prefix: "TSP"
+  suffix: "_u50"
+  overwrite: true
+  # Save under <out_dir>/<prefix><n_nodes><suffix>/...
+  dataset_subdir: true
+  # If false, raw pkl is deleted after concorde pkl is generated.
+  keep_raw_pkl: false
+
+concorde:
+  enabled: true
+  concorde_exe: ""
+  scale: 1000000
+  # 0 means all instances in the generated dataset.
+  n_instance: 0
+  start_index: 0
+  seed: 123
+  print_every: 10

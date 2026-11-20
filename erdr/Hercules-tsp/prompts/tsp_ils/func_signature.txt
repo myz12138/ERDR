@@ -1,0 +1,2 @@
+def perturb_tour_v{version}(distance, current_tour, search_state, rng):
+    """Return a valid perturbed route using the supplied search state."""

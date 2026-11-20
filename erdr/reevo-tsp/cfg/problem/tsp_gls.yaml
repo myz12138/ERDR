@@ -1,0 +1,89 @@
+problem_name: tsp_gls
+problem_type: gls
+obj_type: min
+problem_size: 200 # problem size for training
+func_name: heuristics
+description: Solving Traveling Salesman Problem (TSP) via guided local search. TSP requires finding the shortest path that visits all given nodes and returns to the starting node.
+
+adapter:
+  # Set true to enable grouped train/val evaluation and risk-aware population management.
+  enabled: ${run.gls_adapter.enabled}
+
+  # Selection mode:
+  # - static: single objective by selected_metric (mean gap by default)
+  # - static_risk2: non-dominated + diversity on (group_mean, group_std, group_worst)
+  mode: ${run.gls_adapter.mode} # static | static_risk2
+
+  # metric basis for selected metric: gap (recommended) or cost.
+  metric_basis: ${run.gls_adapter.metric_basis} # gap | cost
+
+  # subgroup objective mode:
+  # - mean_only: selected_metric = overall/group mean
+  # - mean_std_worst: selected_metric = group mean (EOH7-aligned); vector includes std + worst
+  subgroup_eval_mode: ${run.gls_adapter.subgroup_eval_mode} # mean_only | mean_std_worst
+  subgroup_tail_basis: ${run.gls_adapter.subgroup_tail_basis} # gap | time
+  risk_objective_weights: ${run.gls_adapter.risk_objective_weights}
+
+  # Optional custom dataset path (.npy or .pkl). Null means default Reevo train dataset.
+  dataset_path: ${run.paths.dataset_path}
+  # Optional list of dataset paths. When non-empty, all files are concatenated as source pool.
+  dataset_paths: ${run.paths.dataset_paths}
+  # Optional custom adapter artifacts path (manifest/eval_json/history/best_result_adapter.json).
+  # Null means "${hydra.run.dir}/adapter_artifacts".
+  artifacts_dir: ${run.paths.adapter_artifacts_dir}
+  # If > 0, truncate source dataset to the first n instances before grouping.
+  n_instance_eval: ${run.gls_adapter.n_instance_eval}
+  # Output artifact policy for adapter finalize.
+  output_mode: ${run.gls_adapter.output_mode}
+  keep_top_k_solvers: ${run.gls_adapter.keep_top_k_solvers}
+
+  # GLS evaluation controls.
+  perturbation_moves: ${run.gls_adapter.perturbation_moves}
+  iter_limit: ${run.gls_adapter.iter_limit}
+  # Per-instance GLS wall-clock limit (seconds). 0 disables per-instance time cap.
+  time_limit_per_instance: ${run.gls_adapter.time_limit_per_instance}
+  # Eval subprocess timeout in seconds.
+  # < 0: disable; 0: auto-derived from n_eval * time_limit_per_instance; > 0: explicit seconds.
+  eval_process_timeout_sec: ${run.gls_adapter.eval_process_timeout_sec}
+  gap_epsilon: ${run.gls_adapter.gap_epsilon}
+
+  # JIT controls (aligned with prior EOH-style knobs).
+  jit_enable_kernels: ${run.gls_adapter.jit_enable_kernels}
+  jit_numba_cache: ${run.gls_adapter.jit_numba_cache}
+  jit_warmup: ${run.gls_adapter.jit_warmup}
+  # Optional numba decorator for generated heuristics function.
+  # May increase invalid candidates when generated code is not numba-compatible.
+  eva_numba_decorator: ${run.gls_adapter.eva_numba_decorator}
+  # Pre-JIT sanitizer for generated heuristics code (import cleanup / dtype normalization).
+  jit_sanitize_guide: ${run.gls_adapter.jit_sanitize_guide}
+  # When true, sanitizer or JIT compile-probe failure marks candidate invalid.
+  jit_sanitize_strict: ${run.gls_adapter.jit_sanitize_strict}
+
+  groups:
+    # group split config: n_groups_train + n_groups_val must equal n_groups_total
+    n_groups_total: ${run.gls_adapter.groups.n_groups_total}
+    group_size: ${run.gls_adapter.groups.group_size}
+    n_groups_train: ${run.gls_adapter.groups.n_groups_train}
+    n_groups_val: ${run.gls_adapter.groups.n_groups_val}
+    split_seed: ${run.gls_adapter.groups.split_seed}
+    shuffle_cases: ${run.gls_adapter.groups.shuffle_cases}
+
+  population:
+    # Keep ratios for train/val stage candidate filtering.
+    train_keep_ratio: ${run.gls_adapter.population.train_keep_ratio}
+    train_keep_min: ${run.gls_adapter.population.train_keep_min}
+    train_keep_max: ${run.gls_adapter.population.train_keep_max}
+    val_keep_ratio: ${run.gls_adapter.population.val_keep_ratio}
+    val_keep_min: ${run.gls_adapter.population.val_keep_min}
+    val_keep_max: ${run.gls_adapter.population.val_keep_max}
+
+    # Parent pool clipping after stage selection.
+    parent_min: ${run.gls_adapter.population.parent_min}
+    parent_max: ${run.gls_adapter.population.parent_max}
+
+    # EOH7-aligned dominance-dissimilarity controls for static_risk2.
+    dominance_epsilon: ${run.gls_adapter.population.dominance_epsilon}
+    dissimilarity_metric: ${run.gls_adapter.population.dissimilarity_metric} # l2 | l1
+    dds_eps_rel: ${run.gls_adapter.population.dds_eps_rel}
+    dds_softmax_tau: ${run.gls_adapter.population.dds_softmax_tau}
+    dds_novelty_weight: ${run.gls_adapter.population.dds_novelty_weight}

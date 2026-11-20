@@ -1,0 +1,18 @@
+dataset_path: data_generate/TSP200_u50/TSP200_u50_concorde.pkl
+output_dir: erdr/Hercules-tsp/outputs/dynamic_ils
+solvers:
+  baseline: erdr/Hercules-tsp/outputs/hercules_baseline_ils/best_solver.py
+  erdr: erdr/Hercules-tsp/outputs/hercules_erdr_ils/best_solver.py
+n_instances: 50
+seed: 1
+progress:
+- 0.2
+- 0.5
+- 0.8
+sigma: 0.02
+change_ratio: 0.2
+search:
+  framework: ils
+  max_iterations: 500
+  time_limit_seconds: 10
+  watchdog_seconds: 300

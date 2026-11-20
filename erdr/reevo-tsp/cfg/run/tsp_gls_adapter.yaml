@@ -1,0 +1,85 @@
+# Main runtime parameters used by main.py / ReEvo loop.
+# Edit this file, then run:
+#   uv run --python 3.12 main.py
+
+algorithm: reevo
+max_fe: 60
+pop_size: 10
+init_pop_size: 10
+mutation_rate: 0.5
+timeout: 300
+diversify_init_pop: true
+
+paths:
+  # Input dataset path for tsp_gls adapter.
+  # null -> auto use default dataset under reevo/problems/tsp_gls/dataset/
+  dataset_path: null
+  # Optional multi-source dataset paths for tsp_gls adapter.
+  # Keep empty for single-source loading.
+  dataset_paths: []
+  # All run outputs (Hydra run dir) are saved under this root.
+  output_root: reevo/outputs
+  # Adapter artifacts dir (manifest/eval_json/best_result_adapter.json).
+  # null -> save to "${hydra.run.dir}/adapter_artifacts"
+  adapter_artifacts_dir: null
+
+llm:
+  model: gpt-4o-mini
+  temperature: 1.0
+  llm_api_endpoint: ""
+  llm_api_key: ""
+
+# TSP-GLS adapter parameters (referenced by cfg/problem/tsp_gls.yaml).
+gls_adapter:
+  enabled: true
+  # static: full-train on single split (no train/val subgroup split)
+  # static_risk2: grouped train/val split + risk-aware population management
+  mode: static # static | static_risk2
+  metric_basis: gap # gap | cost
+  subgroup_eval_mode: mean_std_worst # mean_only | mean_std_worst
+  subgroup_tail_basis: time # gap | time
+  # Kept for compatibility/logging; static_risk2 metric now aligns with EOH7 (group mean).
+  risk_objective_weights: [0.6, 0.2, 0.2] # [mean, std, worst]
+
+  n_instance_eval: 60
+
+  perturbation_moves: 3
+  iter_limit: 200
+  time_limit_per_instance: 30.0
+  # < 0 disables eval subprocess timeout; 0 auto-derives; > 0 uses explicit seconds.
+  eval_process_timeout_sec: -1
+  gap_epsilon: 1.0e-12
+
+  # Enable JIT acceleration for GLS kernels (falls back gracefully if numba unavailable).
+  jit_enable_kernels: true
+  jit_numba_cache: true
+  jit_warmup: true
+  eva_numba_decorator: true
+  jit_sanitize_guide: true
+  jit_sanitize_strict: false
+
+  groups:
+    n_groups_total: 12
+    group_size: 5
+    n_groups_train: 8
+    n_groups_val: 4
+    split_seed: 42
+    shuffle_cases: true
+
+  population:
+    train_keep_ratio: 1
+    train_keep_min: 8
+    train_keep_max: 10
+
+    val_keep_ratio: 0.5
+    val_keep_min: 4
+    val_keep_max: 4
+
+    parent_min: 4
+    parent_max: 8
+
+    dominance_epsilon: 1.0e-12
+    dissimilarity_metric: l1 # l2 | l1
+    dds_eps_rel: 1.0e-3
+    dds_softmax_tau: 1.0
+    dds_novelty_weight: 0.05
